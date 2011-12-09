@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require 'unshorten'
+
+if ARGV.empty?
+    STDERR << 'USAGE: unshorten URL'
+else
+    ARGV.each { |a| puts Unshorten[a] }
+end
+

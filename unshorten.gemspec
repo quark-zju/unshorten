@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
     s.version = '0.1.0'
     s.date = '2011-12-10'
     s.summary = 'Unshorten URLs'
-    s.description = 'Get the original URL from shortened URLs'
+    s.description = 'Get original URLs from shortened ones'
     s.authors = ["Wu Jun"]
     s.email = 'quark@lihdd.net'
     s.require_paths = ['lib']

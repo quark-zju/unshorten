@@ -33,10 +33,7 @@ class Unshorten
     def unshorten(url, options = {})
       DEFAULT_OPTIONS.each { |k, v| (options[k] = v) unless options.has_key? k }
 
-      expire_cache if @@cache.size > CACHE_SIZE_LIMIT
-      @@cache.delete url unless options[:use_cache]
-
-      @@cache[url] ||= follow(url, options)
+      follow(url, options)
     end
 
     alias :'[]' :unshorten
@@ -62,16 +59,18 @@ class Unshorten
     end
 
     def follow(url, options = DEFAULT_OPTIONS, level = 0) #:nodoc:
+      return @@cache[url] if options[:use_cache] and @@cache[url]
       return url if level >= options[:max_level]
 
       uri = URI.parse(options[:add_missing_http] ? add_missing_http(url) : url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = options[:timeout]
 
-      response = http.request_head(uri.path)
+      response = http.request_head(uri.path) rescue nil
 
       if response.is_a? Net::HTTPRedirection and response['location'] then
-        follow response['location'], options, level + 1
+        expire_cache if @@cache.size > CACHE_SIZE_LIMIT
+        @@cache[url] = follow(response['location'], options, level + 1)
       else
         url
       end

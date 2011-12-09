@@ -10,5 +10,5 @@ Gem::Specification.new do |s|
     s.require_paths = ['lib']
     s.files = Dir['lib/*{,/*}']
     s.test_files = Dir['test/*']
-    s.executables = Dir['bin/*']
+    s.executables = ['unshorten']
 end

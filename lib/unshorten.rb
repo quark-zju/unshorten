@@ -59,9 +59,9 @@ class Unshorten
     end
 
     def follow(url, options = DEFAULT_OPTIONS, level = 0) #:nodoc:
-      return @@cache[url] if options[:use_cache] and @@cache[url]
-
       url = add_missing_http(url) if options[:add_missing_http]
+
+      return @@cache[url] if options[:use_cache] and @@cache[url]
       return url if level >= options[:max_level]
 
       uri = URI.parse(url)

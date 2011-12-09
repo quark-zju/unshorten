@@ -6,6 +6,7 @@ Gem::Specification.new do |s|
     s.description = 'Get original URLs from shortened ones'
     s.authors = ["Wu Jun"]
     s.email = 'quark@lihdd.net'
+    s.homepage = 'https://github.com/quark-zju/unshorten'
     s.require_paths = ['lib']
     s.files = Dir['lib/*{,/*}']
     s.test_files = Dir['test/*']

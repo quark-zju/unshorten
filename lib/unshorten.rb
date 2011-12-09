@@ -11,6 +11,7 @@ class Unshorten
   DEFAULT_OPTIONS = {
     :max_level => 10,
     :timeout => 2,
+    :short_hosts => /.*/,
     :use_cache => true,
     :add_missing_http => true
   }
@@ -25,6 +26,9 @@ class Unshorten
     # @param options [Hash] A set of options
     # @option options [Integer] :max_level Max redirect times
     # @option options [Integer] :timeout Timeout in seconds, for every request
+    # @option options [Regexp]  :short_hosts Hosts that provides short url
+    #                                        services, only send requests if
+    #                                        host matches this regexp
     # @option options [Boolean] :use_cache Use cached result if available
     # @option options [Boolean] :add_missing_http add 'http://' if missing
     # @see DEFAULT_OPTIONS
@@ -65,6 +69,9 @@ class Unshorten
       return url if level >= options[:max_level]
 
       uri = URI.parse(url)
+
+      return url unless uri.host =~ options[:short_hosts]
+
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = options[:timeout]
 

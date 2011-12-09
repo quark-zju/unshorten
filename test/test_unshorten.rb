@@ -13,4 +13,7 @@ class UnshortenTest < Test::Unit::TestCase
         assert_equal SHORTENED_URL, Unshorten.unshorten(SHORTENED_URL, :max_level => 0, :use_cache => false)
     end
 
+    def test_option_short_hosts
+        assert_equal SHORTENED_URL, Unshorten.unshorten(SHORTENED_URL, :short_hosts => /jmp/, :use_cache => false)
+    end
 end

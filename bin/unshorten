@@ -3,7 +3,7 @@
 require 'unshorten'
 
 if ARGV.empty?
-    STDERR << 'USAGE: unshorten URL'
+    STDERR << "USAGE: unshorten URL\n"
 else
     ARGV.each { |a| puts Unshorten[a] }
 end

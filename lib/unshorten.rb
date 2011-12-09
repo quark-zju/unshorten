@@ -60,9 +60,11 @@ class Unshorten
 
     def follow(url, options = DEFAULT_OPTIONS, level = 0) #:nodoc:
       return @@cache[url] if options[:use_cache] and @@cache[url]
+
+      url = add_missing_http(url) if options[:add_missing_http]
       return url if level >= options[:max_level]
 
-      uri = URI.parse(options[:add_missing_http] ? add_missing_http(url) : url)
+      uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = options[:timeout]
 

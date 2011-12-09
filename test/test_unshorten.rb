@@ -1,3 +1,5 @@
+# coding: utf-8
+
 require 'test/unit'
 require 'unshorten'
 
@@ -9,6 +11,11 @@ class UnshortenTest < Test::Unit::TestCase
         assert_equal ORIGINAL_URL, Unshorten[SHORTENED_URL, :use_cache => false]
     end
 
+    def test_illegal_urls
+        illegal_url = 'http://a汉字bc.那么/是非法的?url'
+        assert_equal illegal_url, Unshorten.unshorten(illegal_url, :use_cache => false)
+    end
+
     def test_option_max_level
         assert_equal SHORTENED_URL, Unshorten.unshorten(SHORTENED_URL, :max_level => 0, :use_cache => false)
     end
@@ -16,4 +23,5 @@ class UnshortenTest < Test::Unit::TestCase
     def test_option_short_hosts
         assert_equal SHORTENED_URL, Unshorten.unshorten(SHORTENED_URL, :short_hosts => /jmp/, :use_cache => false)
     end
+
 end

@@ -11,7 +11,7 @@ class Unshorten
   DEFAULT_OPTIONS = {
     :max_level => 10,
     :timeout => 2,
-    :short_hosts => /.*/,
+    :short_hosts => Regexp.union('url', /^[^.]{1,6}\.[^.]{1,2}$/i),
     :use_cache => true,
     :add_missing_http => true
   }
@@ -68,9 +68,9 @@ class Unshorten
       return @@cache[url] if options[:use_cache] and @@cache[url]
       return url if level >= options[:max_level]
 
-      uri = URI.parse(url)
+      uri = URI.parse(url) rescue nil
 
-      return url unless uri.host =~ options[:short_hosts]
+      return url if uri.nil? or not uri.host =~ options[:short_hosts]
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = options[:timeout]

@@ -68,7 +68,7 @@ class Unshorten
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = options[:timeout]
 
-      response = http.request_head(uri.path) rescue nil
+      response = http.request_head(uri.path.empty? '/' : uri.path) rescue nil
 
       if response.is_a? Net::HTTPRedirection and response['location'] then
         expire_cache if @@cache.size > CACHE_SIZE_LIMIT

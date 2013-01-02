@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/https'
 require 'uri'
 
 # Get original URLs from shortened ones.
@@ -28,7 +29,8 @@ class Unshorten
     # @option options [Integer] :timeout Timeout in seconds, for every request
     # @option options [Regexp]  :short_hosts Hosts that provides short url
     #                                        services, only send requests if
-    #                                        host matches this regexp
+    #                                        host matches this regexp. Set to false
+    #                                        to follow all redirects.
     # @option options [Boolean] :use_cache Use cached result if available
     # @option options [Boolean] :add_missing_http add 'http://' if missing
     # @see DEFAULT_OPTIONS
@@ -70,10 +72,12 @@ class Unshorten
 
       uri = URI.parse(url) rescue nil
 
-      return url if uri.nil? or not uri.host =~ options[:short_hosts]
+      return url if uri.nil?
+      return url if options[:short_hosts] != false and not uri.host =~ options[:short_hosts]
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.read_timeout = options[:timeout]
+      http.use_ssl = true if uri.scheme == "https"
 
       response = http.request_head(uri.path.empty? ? '/' : uri.path) rescue nil
 

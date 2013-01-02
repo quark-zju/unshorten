@@ -24,4 +24,19 @@ class UnshortenTest < Test::Unit::TestCase
         assert_equal SHORTENED_URL, Unshorten.unshorten(SHORTENED_URL, :short_hosts => /jmp/, :use_cache => false)
     end
 
+    HTTPS_LINK_1_FULL = 'https://github.com/aaronpk/unshorten'
+    HTTPS_LINK_1_SHORT = 'https://t.co/5204FqAr'
+
+    def test_https_link
+        assert_equal HTTPS_LINK_1_FULL, Unshorten.unshorten(HTTPS_LINK_1_SHORT, :short_hosts => /./, :use_cache => false)
+    end
+
+    def test_follow_all_redirects
+        assert_equal HTTPS_LINK_1_FULL, Unshorten.unshorten(HTTPS_LINK_1_SHORT, :short_hosts => false, :use_cache => false)
+    end
+
+    def test_only_tco_links
+        assert_equal "http://aaron.pk/649", Unshorten.unshorten(HTTPS_LINK_1_SHORT, :short_hosts => /t\.co/, :use_cache => false)
+    end
+
 end

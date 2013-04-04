@@ -76,6 +76,7 @@ class Unshorten
       return url if options[:short_hosts] != false and not uri.host =~ options[:short_hosts]
 
       http = Net::HTTP.new(uri.host, uri.port)
+      http.open_timeout = options[:timeout]
       http.read_timeout = options[:timeout]
       http.use_ssl = true if uri.scheme == "https"
 

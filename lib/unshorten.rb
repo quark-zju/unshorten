@@ -12,7 +12,8 @@ class Unshorten
   DEFAULT_OPTIONS = {
     :max_level => 10,
     :timeout => 2,
-    :short_hosts => Regexp.union('url', /^[^.]{1,6}\.[^.]{1,2}$/i),
+    :short_hosts => false,
+    :short_urls => /^(?:https?:)?\/*[^\/]*\/*[^\/]*$/,
     :use_cache => true,
     :add_missing_http => true
   }
@@ -29,8 +30,12 @@ class Unshorten
     # @option options [Integer] :timeout Timeout in seconds, for every request
     # @option options [Regexp]  :short_hosts Hosts that provides short url
     #                                        services, only send requests if
-    #                                        host matches this regexp. Set to false
-    #                                        to follow all redirects.
+    #                                        host matches this regexp. Set to 
+    #                                        nil to follow all redirects.
+    # @option options [Regexp]  :short_urls  URLs that looks like a short one.
+    #                                        Only send requests when the URL
+    #                                        match this regexp. Set to nil to
+    #                                        follow all redirects.
     # @option options [Boolean] :use_cache Use cached result if available
     # @option options [Boolean] :add_missing_http add 'http://' if missing
     # @see DEFAULT_OPTIONS
@@ -69,11 +74,12 @@ class Unshorten
 
       return @@cache[url] if options[:use_cache] and @@cache[url]
       return url if level >= options[:max_level]
+      return url if options[:short_urls] && ! (url =~ options[:short_urls])
 
       uri = URI.parse(url) rescue nil
 
       return url if uri.nil?
-      return url if options[:short_hosts] != false and not uri.host =~ options[:short_hosts]
+      return url if options[:short_hosts] && ! (uri.host =~ options[:short_hosts])
 
       http = Net::HTTP.new(uri.host, uri.port)
       http.open_timeout = options[:timeout]

@@ -1,0 +1,17 @@
+PATH
+  remote: .
+  specs:
+    unshorten (0.2.1)
+
+GEM
+  specs:
+    minitest (5.3.0)
+    rake (10.1.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest
+  rake
+  unshorten!

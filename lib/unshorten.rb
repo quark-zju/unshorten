@@ -4,18 +4,17 @@ require 'uri'
 
 # Get original URLs from shortened ones.
 class Unshorten
-
   # Cache entities limit
   CACHE_SIZE_LIMIT = 1024
 
   # Default options for unshorten
   DEFAULT_OPTIONS = {
-    :max_level => 10,
-    :timeout => 2,
-    :short_hosts => false,
-    :short_urls => /^(?:https?:)?\/*[^\/]*\/*[^\/]*$/,
-    :use_cache => true,
-    :add_missing_http => true
+      :max_level => 10,
+      :timeout => 2,
+      :short_hosts => false,
+      :short_urls => /^(?:https?:)?\/*[^\/]*\/*[^\/]*$/,
+      :use_cache => true,
+      :add_missing_http => true
   }
 
   @@cache = { }
@@ -30,7 +29,7 @@ class Unshorten
     # @option options [Integer] :timeout Timeout in seconds, for every request
     # @option options [Regexp]  :short_hosts Hosts that provides short url
     #                                        services, only send requests if
-    #                                        host matches this regexp. Set to 
+    #                                        host matches this regexp. Set to
     #                                        nil to follow all redirects.
     # @option options [Regexp]  :short_urls  URLs that looks like a short one.
     #                                        Only send requests when the URL
@@ -75,7 +74,6 @@ class Unshorten
       return @@cache[url] if options[:use_cache] and @@cache[url]
       return url if level >= options[:max_level]
       return url if options[:short_urls] && ! (url =~ options[:short_urls])
-
       uri = URI.parse(url) rescue nil
 
       return url if uri.nil?
@@ -86,7 +84,13 @@ class Unshorten
       http.read_timeout = options[:timeout]
       http.use_ssl = true if uri.scheme == "https"
 
-      response = http.request_head(uri.path.empty? ? '/' : uri.path) rescue nil
+      if uri.path.present? && uri.query.present?
+        response = http.request_head("#{uri.path}?#{uri.query}") rescue nil
+      elsif uri.path.present? && !uri.query
+        response = http.request_head(uri.path) rescue nil
+      else
+        response = http.request_head('/') rescue nil
+      end
 
       if response.is_a? Net::HTTPRedirection and response['location'] then
         expire_cache if @@cache.size > CACHE_SIZE_LIMIT

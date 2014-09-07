@@ -46,7 +46,7 @@ class UnshortenTest < MiniTest::Test
   end
 
   def test_relative_url
-    assert_equal 'http://waterpigs.co.uk/articles/getting-started-with-microformats2/', Unshorten.unshorten('http://bit.ly/1l1Dz6K', :short_urls => nil, :use_cache => false)
+    assert_equal 'http://waterpigs.co.uk/articles/getting-started-with-microformats2/?utm_content=buffer79474&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer', Unshorten.unshorten('http://bit.ly/1l1Dz6K', :short_urls => nil, :use_cache => false)
   end
 
 

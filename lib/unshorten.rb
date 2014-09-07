@@ -84,9 +84,9 @@ class Unshorten
       http.read_timeout = options[:timeout]
       http.use_ssl = true if uri.scheme == "https"
 
-      if uri.path.present? && uri.query.present?
+      if uri.path && uri.query
         response = http.request_head("#{uri.path}?#{uri.query}") rescue nil
-      elsif uri.path.present? && !uri.query
+      elsif uri.path && !uri.query
         response = http.request_head(uri.path) rescue nil
       else
         response = http.request_head('/') rescue nil

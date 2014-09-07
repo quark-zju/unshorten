@@ -16,6 +16,12 @@ class UnshortenTest < MiniTest::Test
     assert_equal illegal_url, Unshorten.unshorten(illegal_url, :use_cache => false)
   end
 
+  def test_illegal_url_results
+    shortened_url = 'http://bit.ly/1r904rG'
+    original_url  = 'http://www.fwi.co.uk/articles/02/09/2014/146471/willow-diversification-secures-beef-farm39s-future.htm?cmpid=SOC|Twitter|FarmersWeekly|sf4488038|sf4488038'
+    assert_equal URI.encode(original_url), Unshorten.unshorten(shortened_url, :use_cache => false)
+  end
+
   def test_option_max_level
     assert_equal SHORTENED_URL, Unshorten.unshorten(SHORTENED_URL, :max_level => 0, :use_cache => false)
   end

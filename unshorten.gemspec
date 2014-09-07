@@ -1,6 +1,10 @@
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'version'
+
 Gem::Specification.new do |s|
   s.name = 'unshorten'
-  s.version = '0.3.1'
+  s.version = Unshorten::VERSION
   s.license = 'BSD'
   s.date = Date.civil(2014, 8, 20)
   s.summary = 'Unshorten URLs'

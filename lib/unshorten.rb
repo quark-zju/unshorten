@@ -1,9 +1,10 @@
 require 'net/http'
 require 'net/https'
 require 'uri'
+require 'version'
 
 # Get original URLs from shortened ones.
-class Unshorten
+module Unshorten
   # Cache entities limit
   CACHE_SIZE_LIMIT = 1024
 

@@ -1,9 +1,10 @@
 PATH
   remote: .
   specs:
-    unshorten (0.2.1)
+    unshorten (0.3.1)
 
 GEM
+  remote: https://rubygems.org/
   specs:
     minitest (5.3.0)
     rake (10.1.1)

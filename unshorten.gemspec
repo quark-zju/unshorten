@@ -16,6 +16,6 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/*{,/*}']
   s.test_files = Dir['test/*']
   s.executables = ['unshorten']
-  s.add_development_dependency 'minitest'
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'minitest', '~> 5.3'
+  s.add_development_dependency 'rake', '~> 10.1'
 end

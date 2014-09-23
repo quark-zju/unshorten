@@ -1,9 +1,10 @@
 require 'net/http'
 require 'net/https'
 require 'uri'
+require 'version'
 
 # Get original URLs from shortened ones.
-class Unshorten
+module Unshorten
   # Cache entities limit
   CACHE_SIZE_LIMIT = 1024
 
@@ -84,9 +85,9 @@ class Unshorten
       http.read_timeout = options[:timeout]
       http.use_ssl = true if uri.scheme == "https"
 
-      if uri.path.present? && uri.query.present?
+      if uri.path && uri.query
         response = http.request_head("#{uri.path}?#{uri.query}") rescue nil
-      elsif uri.path.present? && !uri.query
+      elsif uri.path && !uri.query
         response = http.request_head(uri.path) rescue nil
       else
         response = http.request_head('/') rescue nil
@@ -94,7 +95,7 @@ class Unshorten
 
       if response.is_a? Net::HTTPRedirection and response['location'] then
         expire_cache if @@cache.size > CACHE_SIZE_LIMIT
-        location = response['location']
+        location = URI.encode(response['location'])
         location = (uri + location).to_s if location
         @@cache[url] = follow(location, options, level + 1)
       else

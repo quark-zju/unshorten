@@ -14,6 +14,7 @@ module Unshorten
       :timeout => 2,
       :short_hosts => false,
       :short_urls => /^(?:https?:)?\/*[^\/]*\/*[^\/]*$/,
+      :follow_codes => [302, 301],
       :use_cache => true,
       :add_missing_http => true
   }
@@ -36,6 +37,11 @@ module Unshorten
     #                                        Only send requests when the URL
     #                                        match this regexp. Set to nil to
     #                                        follow all redirects.
+    # @option options [Array]   :follow_codes An array of HTTP status codes
+    #                                         (intergers). Only follow a
+    #                                         redirect if the response HTTP
+    #                                         code matches one item of the
+    #                                         array.
     # @option options [Boolean] :use_cache Use cached result if available
     # @option options [Boolean] :add_missing_http add 'http://' if missing
     # @see DEFAULT_OPTIONS
@@ -84,7 +90,7 @@ module Unshorten
       path += "?#{uri.query}" if uri.query
       response = http.request_head(path) rescue nil
 
-      if response.is_a? Net::HTTPRedirection and response['location'] then
+      if response.is_a?(Net::HTTPRedirection) && options[:follow_codes].include?(response.code.to_i) && response['location'] then
         expire_cache if @@cache.size > CACHE_SIZE_LIMIT
         location = URI.encode(response['location'])
         location = (uri + location).to_s if location
@@ -99,4 +105,3 @@ module Unshorten
 end
 
 # vim:et:ts=2 sw=2
-

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    unshorten (0.3.2)
+    unshorten (0.3.3)
 
 GEM
   remote: https://rubygems.org/
@@ -13,6 +13,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  minitest
-  rake
+  minitest (~> 5.3)
+  rake (~> 10.1)
   unshorten!

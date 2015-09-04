@@ -55,12 +55,6 @@ module Unshorten
       @@cache = { }
     end
 
-    def mix_options(old, *new) #:nodoc:
-      options = old.dup
-      new.each { |n| n.each { |k, v| options[k] = v } }
-      options
-    end
-
     def add_missing_http(url) #:nodoc:
       if url =~ /^https?:/i
         url
@@ -83,15 +77,12 @@ module Unshorten
       http = Net::HTTP.new(uri.host, uri.port)
       http.open_timeout = options[:timeout]
       http.read_timeout = options[:timeout]
-      http.use_ssl = true if uri.scheme == "https"
+      http.use_ssl = true if uri.scheme == 'https'
 
-      if uri.path && uri.query
-        response = http.request_head("#{uri.path}?#{uri.query}") rescue nil
-      elsif uri.path && !uri.query
-        response = http.request_head(uri.path) rescue nil
-      else
-        response = http.request_head('/') rescue nil
-      end
+      path = uri.path
+      path = '/' if !path || path.empty?
+      path += "?#{uri.query}" if uri.query
+      response = http.request_head(path) rescue nil
 
       if response.is_a? Net::HTTPRedirection and response['location'] then
         expire_cache if @@cache.size > CACHE_SIZE_LIMIT

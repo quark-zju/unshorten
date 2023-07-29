@@ -92,7 +92,7 @@ module Unshorten
 
       if response.is_a?(Net::HTTPRedirection) && options[:follow_codes].include?(response.code.to_i) && response['location'] then
         expire_cache if @@cache.size > CACHE_SIZE_LIMIT
-        location = URI.encode(response['location'])
+        location = Addressable::URI.encode(response['location'])
         location = (uri + location).to_s if location
         @@cache[url] = follow(location, options, level + 1)
       else

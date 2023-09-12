@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    unshorten (0.3.3)
+    unshorten (0.3.4)
 
 GEM
   remote: https://rubygems.org/

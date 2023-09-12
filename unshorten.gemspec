@@ -6,7 +6,6 @@ Gem::Specification.new do |s|
   s.name = 'unshorten'
   s.version = Unshorten::VERSION
   s.license = 'BSD'
-  s.date = Date.civil(2015, 9, 5)
   s.summary = 'Unshorten URLs'
   s.description = 'Get original URLs from shortened ones'
   s.authors = ["Jun Wu"]

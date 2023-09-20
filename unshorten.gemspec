@@ -5,7 +5,7 @@ require 'version'
 Gem::Specification.new do |s|
   s.name = 'unshorten'
   s.version = Unshorten::VERSION
-  s.license = 'BSD'
+  s.license = 'BSD-2-Clause'
   s.summary = 'Unshorten URLs'
   s.description = 'Get original URLs from shortened ones'
   s.authors = ["Jun Wu"]
